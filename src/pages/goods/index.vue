@@ -11,10 +11,10 @@
           >
           <el-dialog title="添加商品" :visible.sync="dialogAddFormVisible">
             <el-form :model="addForm">
-              <el-form-item label="商品id" :label-width="formLabelWidth">
+              <el-form-item label="商品编码" :label-width="formLabelWidth">
                 <el-input
                   class="elFormInput"
-                  v-model="addForm.id"
+                  v-model="addForm.code"
                   clearable
                 ></el-input>
               </el-form-item>
@@ -28,6 +28,14 @@
               </el-form-item>
               <el-form-item label="库存" :label-width="formLabelWidth">
                 <el-input class="elFormInput" v-model="addForm.count" clearable>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="颜色" :label-width="formLabelWidth">
+                <el-input class="elFormInput" v-model="addForm.color" clearable>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="内存大小" :label-width="formLabelWidth">
+                <el-input class="elFormInput" v-model="addForm.size" clearable>
                 </el-input>
               </el-form-item>
             </el-form>
@@ -101,29 +109,14 @@
       </div>
     </div>
     <div class="goodsTable">
-      <el-table
-        v-loading="loading"
-        ref="multipleTable"
-        :data="tableData"
-        tooltip-effect="dark"
-        border
-        @selection-change="handleSelectionChange"
-      >
+      <el-table v-loading="loading" ref="multipleTable" :data="tableData" tooltip-effect="dark" border @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="100"> </el-table-column>
-        <el-table-column prop="goodsCode" label="商品编码" width="300" sortable resizable>
-        </el-table-column>
-        <el-table-column prop="name" label="商品名称" width="300" resizable>
-        </el-table-column>
-        <el-table-column
-          prop="price"
-          label="商品价格"
-          width="300"
-          sortable
-          resizable
-        >
-        </el-table-column>
-        <el-table-column prop="count" label="库存" sortable="">
-        </el-table-column>
+        <el-table-column prop="goods_code" label="商品编码" width="300" sortable resizable></el-table-column>
+        <el-table-column prop="goods_name" label="商品名称" width="300" resizable></el-table-column>
+        <el-table-column prop="goods_price" label="商品价格" width="300" sortable resizable></el-table-column>
+        <el-table-column prop="goods_count" label="库存" sortable=""></el-table-column>
+        <el-table-column prop="goods_color" label="颜色" sortable=""></el-table-column>
+        <el-table-column prop="goods_RAM" label="内存大小" sortable=""></el-table-column>
       </el-table>
     </div>
     <el-pagination style="float:right;" background layout="prev, pager, next" :total="1000" @current-change="currentChange"></el-pagination>
@@ -145,14 +138,18 @@ export default {
         name: "",
         price: "",
         count: "",
-        goodsCode:''
+        code:'',
+        color:'',
+        size:''
       },
       changeForm: {
         id: "",
         name: "",
         price: "",
         count: "",
-        goodsCode:''
+        goodsCode:"",
+        color:"",
+        size:""
       },
       formLabelWidth: "120px",
       searchWord: "",
@@ -221,10 +218,12 @@ export default {
       this.dialogAddFormVisible = false;
       let { addForm } = this;
       if (
-        addForm.id == "" ||
+        addForm.code== "" ||
         addForm.name == "" ||
         addForm.price == "" ||
-        addForm.count == ""
+        addForm.count == "" ||
+        addForm.color == "" ||
+        addForm.size == ""
       ) {
         this.$message({
           type: "warning",
@@ -234,10 +233,12 @@ export default {
         axios
           .get("http://localhost:3000/addGoodsData", {
             params: {
-              id: addForm.id,
+              code: addForm.code,
               name: addForm.name,
               price: addForm.price,
               count: addForm.count,
+              color: addForm.color,
+              size: addForm.size
             },
           })
           .then((res) => {})
@@ -245,10 +246,12 @@ export default {
             console.log("获取数据失败" + err);
           });
         // 添加完成后把表格置空
-        addForm.id = "";
+        addForm.code = "";
         addForm.name = "";
         addForm.price = "";
         addForm.count = "";
+        addForm.color = ""
+        addForm.size = ""
         this.getGoodsData();
         this.$message({
           type: "success",
@@ -265,14 +268,14 @@ export default {
           params: {
             oldId: multipleSelection[0].id,
             newId: changeForm.id,
-            name: changeForm.name,
-            price: changeForm.price,
-            count: changeForm.count,
+            goods_name: changeForm.name,
+            goods_price: changeForm.price,
+            goods_count: changeForm.count,
           },
         })
         .then((res) => {})
         .catch((err) => {
-          console.log("获取数据失败" + err);
+          console.log("修改数据失败" + err);
         });
       this.getGoodsData();
       this.$message({
@@ -291,11 +294,12 @@ export default {
       } else {
         this.dialogChangeFormVisible = true;
         let { changeForm, multipleSelection } = this;
-        changeForm.id = multipleSelection[0].id;
-        changeForm.name = multipleSelection[0].name;
-        changeForm.price = multipleSelection[0].price;
-        changeForm.count = multipleSelection[0].count;
-        changeForm.goodsCode = multipleSelection[0].goodsCode;
+        console.log(multipleSelection)
+        changeForm.id = multipleSelection[0].goods_id;
+        changeForm.name = multipleSelection[0].goods_name;
+        changeForm.price = multipleSelection[0].goods_price;
+        changeForm.count = multipleSelection[0].goods_count;
+        changeForm.goodsCode = multipleSelection[0].goods_code;
       }
     },
     // 点击搜索按钮的回调
@@ -365,8 +369,14 @@ export default {
   height: 40px;
   color: black;
 }
+.right{
+  margin: 10px 0;
+}
+.left{
+  margin: 10px 0;
+}
 .right .el-button {
   position: absolute;
-  left: 850px;
+  float: left;
 }
 </style>

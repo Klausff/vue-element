@@ -124,14 +124,15 @@ export default {
         message: "删除成功",
       });
     },
-    // 确定修改订单数据
+    // 修改订单数据
     updateOrderData(){
       this.dialogFormVisible = false
       let {changeOrderData} = this
-      axios.get('http://localhost:3000/updateOrderData',{params:{name:changeOrderData.name,tel:changeOrderData.tel,goods:changeOrderData.goods,count:changeOrderData.count,total:changeOrderData.total,address:changeOrderData.address,orderNum:changeOrderData.orderNum}}).then((res)=>{
-
+      axios.get('http://localhost:3000/updateOrderData',{params:{name:changeOrderData.name,tel:changeOrderData.tel,
+      goods:changeOrderData.goods,count:changeOrderData.count,
+      total:changeOrderData.total,address:changeOrderData.address,orderNum:changeOrderData.orderNum}}).then((res)=>{
       }).catch((err)=>{
-        console.log('获取数据失败'+err)
+        console.log('修改数据失败'+err)
       })
       this.getOrderData()
       this.$message({
@@ -144,7 +145,7 @@ export default {
       this.dialogFormVisible = false
       this.$message({
         type:'info',
-        message:'取消删除'
+        message:'取消修改'
       })
     },
     async getOrderData() {

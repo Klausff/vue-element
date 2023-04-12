@@ -14,15 +14,15 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>代办事项</span>
-            <el-button @click="isRead=true" style="float: right; padding: 3px 0" type="text">全部已读</el-button>
+            <el-button @click="todoListISRead=true" style="float: right; padding: 3px 0" type="text">全部已读</el-button>
           </div>
           <div v-for="o in 8" :key="o" class="text item">
-            <a :class="isRead?'iconfont icon-yixuan green':'iconfont icon-danxuanweixuanzhong'"></a>
-            <span :class="isRead?'isRead':''">{{'代办' + o }}</span>
+            <a :class="todoListISRead?'iconfont icon-yixuan green':'iconfont icon-danxuanweixuanzhong'"></a>
+            <span :class="todoListISRead?'isRead':''">{{'代办' + o }}</span>
           </div>
         </el-card>
         <el-button slot="reference">
-          <a class="iconfont icon-xiaoxitongzhi"></a>
+          <a class="iconfont icon-daiban"></a>
           <span>代办</span>
         </el-button>
       </el-popover>
@@ -32,11 +32,11 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>消息通知</span>
-            <el-button @click="isRead=true" style="float: right; padding: 3px 0" type="text">全部已读</el-button>
+            <el-button @click="messageIsRead=true" style="float: right; padding: 3px 0" type="text">全部已读</el-button>
           </div>
           <div v-for="o in 8" :key="o" class="text item">
-            <a :class="isRead?'iconfont icon-yixuan green':'iconfont icon-yuandian red'"></a>
-            <span :class="isRead?'isRead':''">{{'消息 ' + o }}</span>
+            <a :class="messageIsRead?'iconfont icon-yixuan green':'iconfont icon-yuandian red'"></a>
+            <span :class="messageIsRead?'isRead':''">{{'消息 ' + o }}</span>
           </div>
         </el-card>
         <el-button slot="reference">
@@ -77,38 +77,41 @@ export default {
       breadList: [],
       newBreadList: [],
       date:new Date(),
-      isRead:false
+      messageIsRead:false,
+      todoListISRead:false
     };
   },
   created() {
     this.getRouteChange();
     // 天气配置(和风天气)
     window.WIDGET = {
-    "CONFIG": {
-      "modules": "01234",
-      "background": "1",
-      "tmpColor": "FFFFFF",
-      "tmpSize": "16",
-      "cityColor": "FFFFFF",
-      "citySize": "16",
-      "aqiColor": "FFFFFF",
-      "aqiSize": "16",
-      "weatherIconSize": "24",
-      "alertIconSize": "18",
-      "padding": "10px 10px 10px 10px",
-      "shadow": "0",
-      "language": "zh",
-      "borderRadius": "5",
-      "fixed": "false",
-      "vertical": "top",
-      "horizontal": "left",
-      "key": "d5e71e8bf1f84d2ea45a2ebe99229361"
+        "CONFIG": {
+        "modules": "01234",
+        "background": "1",
+        "tmpColor": "FFFFFF",
+        "tmpSize": "16",
+        "cityColor": "FFFFFF",
+        "citySize": "16",
+        "aqiColor": "FFFFFF",
+        "aqiSize": "16",
+        "weatherIconSize": "24",
+        "alertIconSize": "18",
+        "padding": "10px 10px 10px 10px",
+        "shadow": "0",
+        "language": "auto",
+        "borderRadius": "5",
+        "fixed": "false",
+        "vertical": "top",
+        "horizontal": "left",
+        "city": "CN101190201",
+        "key": "7c4d1883bf3143779cdf1b3cefb000eb"
       }
     }
     var script = document.createElement('script')
     script.type = 'text/javascript';
     script.src = 'https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0';
     document.getElementsByTagName('head')[0].appendChild(script);
+
   },
   watch: {
     $route() {
@@ -179,7 +182,7 @@ a {
 }
 .weather{
   position: absolute;
-  right: 80px;
+  right: 100px;
   top: 8px;
   width: 8%;
   z-index: 1;

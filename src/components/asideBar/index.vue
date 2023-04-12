@@ -11,11 +11,11 @@
         <i class="el-icon-s-home"></i>
         <span slot="title">个人中心</span>
       </el-menu-item>
-      <el-menu-item index="2" @click="toUser">
+      <el-menu-item index="2" @click="toGoods">
         <i class="el-icon-s-goods"></i>
         <span slot="title">商品管理</span>
       </el-menu-item>
-      <el-menu-item index="3" @click="toSetting" >
+      <el-menu-item index="3" @click="toOrder" >
         <i class="el-icon-s-order" ></i>
         <span slot="title">订单管理</span>
       </el-menu-item>
@@ -39,14 +39,14 @@ export default {
     toHome(){
       this.$router.push('/home')
     },
-    toUser(){
+    toGoods(){
       this.$router.push('/goods')
     },
-    toSetting(){
+    toOrder(){
       this.$router.push('/order')
     },
-    toCount(){
-      this.$router.push('/count')
+    toCount() {
+      this.$router.push('/dataCount')
     }
   },
   mounted(){

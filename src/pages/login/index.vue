@@ -23,10 +23,6 @@
       <el-button type="primary" class="el-button" round @click="login"
         >登录</el-button
       >
-      <div class="tips">
-        <span>username: admin</span>
-        <span>password: any</span>
-      </div>
     </el-form>
   </div>
 </template>
@@ -36,10 +32,12 @@ export default {
   name:'Login',
   data() {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       isShowPwd:false,
-      pwd:'password'
+      pwd:'password',
+      userData:[],
+      newArr:[]
     };
   },
   methods: {
@@ -48,7 +46,7 @@ export default {
       if(this.username==''){
         this.$message({
           type:'warning',
-          message:'请输入用户名'
+          message:'用户名不能为空！'
         })
       }else if(this.password==''){
         this.$message({
@@ -56,12 +54,12 @@ export default {
           message:'密码不能为空'
         })
       }
-      if(this.username=='admin'&&this.password!=='') this.$router.push('/home')
+      if(this.username=='admin'&&this.password=='123') this.$router.push('/home')
     },
     // 密码显示/隐藏
     changeShow() {
         this.isShowPwd=!this.isShowPwd;
-        if(this.pwd=='password'){
+        if(this.pwd==='password'){
           this.pwd='text';
         }else{
           this.pwd='password';

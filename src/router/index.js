@@ -5,7 +5,7 @@ import Home from '@/pages/home';
 import Goods from '@/pages/goods';
 import Main from '@/pages/main';
 import Order from '@/pages/order'
-import Count from '@/pages/count'
+import DataCount from '@/pages/dataCount'
 
 //解决vue路由重复导航错误
 //获取原型对象上的push函数
@@ -17,8 +17,7 @@ VueRouter.prototype.push = function push(location) {
 Vue.use(VueRouter)
 export default new VueRouter({
     routes:[
-        {
-            
+        { 
             path:'/login',
             component:Login
         },
@@ -50,8 +49,8 @@ export default new VueRouter({
                     }
                 },
                 {
-                    path:'/count',
-                    component:Count,
+                    path:'/dataCount',
+                    component:DataCount,
                     meta:{
                         title:'数据统计'
                     }

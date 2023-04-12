@@ -33,7 +33,30 @@ const query = (sql, params, callback) => {
         })
     })
 }
-
+// 获取百度热搜数据
+app.get('/getBaiduHotData',(req,res)=>{
+    query('select * from baiduhot',(req,result)=>{
+        res.send(result)
+    })
+})
+// 获取微博头条数据
+app.get('/getWeiboHotData',(req,res)=>{
+    query('select * from weibohot',(req,result)=>{
+        res.send(result)
+    })
+})
+// 获取知乎头条数据
+app.get('/getZhihuHotData',(req,res)=>{
+    query('select * from zhihuhot',(req,result)=>{
+        res.send(result)
+    })
+})
+// 获取用户数据
+app.get('/getUserData',(req,res)=>{
+    query('select * from user',(req,result)=>{
+        res.send(result)
+    })
+})
 // 获取商品数据
 app.get('/getGoodsData',(req,res)=>{
     query('select * from goods',(req,result)=>{
@@ -42,26 +65,24 @@ app.get('/getGoodsData',(req,res)=>{
 })
 // 添加商品
 app.get('/addGoodsData',(req,res)=>{
-    let id= req.query.id
-    let name = req.query.name
-    let price = req.query.price
-    let count = req.query.count
-    if(id==''){
-        return
-    }else{
-        query(`insert into goods values(${id},'${name}',${price},${count})`,(req,result)=>{
-        })
-    }
+    let goods_code = req.query.code
+    let goods_name = req.query.name
+    let goods_price = req.query.price
+    let goods_count = req.query.count
+    let goods_size = req.query.size
+    let goods_color = req.query.color
+    query(`insert into goods(goods_code,goods_name,goods_price,goods_count,goods_RAM,goods_color) values(${goods_code},'${goods_name}',${goods_price},${goods_count},'${goods_size}','${goods_color}')`,(req,result)=>{
+    })
 })
 // 修改商品
 app.get('/orderGoodsData',(req,res)=>{
     // console.log(req.query)
     let oldId = req.query.oldId
     let newId= req.query.newId
-    let name = req.query.name
-    let price = req.query.price
-    let count = req.query.count
-    query(`update goods set id=${newId},name='${name}',price=${price},count=${count} where id=${oldId}`,(req,result)=>{
+    let goods_name = req.query.name
+    let goods_price = req.query.price
+    let goods_count = req.query.count
+    query(`update goods set goods_id=${newId},goods_name='${goods_name}',goods_price=${goods_price},goods_count=${goods_count} where id=${oldId}`,(req,result)=>{
     })
 })
 // 删除商品

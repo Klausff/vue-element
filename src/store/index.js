@@ -4,11 +4,13 @@ Vue.use(vuex)
 import login from './login'
 import goods from './goods'
 import order from './order'
+import home from './home'
 //对外暴露仓库
 export default new vuex.Store({
     modules:{
         login,
         goods,
-        order
+        order,
+        home,
     }
 })

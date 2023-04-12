@@ -1,9 +1,10 @@
 <template>
   <div class="homeContainer">
+    <!-- 数据展示 -->
     <div class="data">
       <div class="item" @click="showUserEc">
         <a class="userIcon iconfont icon-yonghu2"></a>
-        <span class="text">用户总数</span>
+        <span class="text">新增访客</span>
         <span class="num"
           ><countTo
             :startVal="0"
@@ -46,6 +47,7 @@
         ></span>
       </div>
     </div>
+    <!-- echarts图表 -->
     <div ref="echarts" class="echarts">
       <div
         ref="chartCategory"
@@ -57,7 +59,66 @@
         "
       ></div>
     </div>
-    
+    <!-- 热搜榜 -->
+    <div>
+      <!-- 百度热搜 -->
+      <el-card class="baidu-box-card">
+        <div slot="header" class="clearfix">
+          <a class="iconfont icon-baidu"></a>
+          <span>百度热搜</span>
+        </div>
+        <div
+          v-for="(hotdata, index) in baiduHotData"
+          :key="hotdata.id"
+          class="text"
+        >
+          <a :href="hotdata.baiduhot_src" target="_blank">
+            <p :style="{ color: hotdata.baiduhot_isred ? 'red' : 'black' }">
+              {{ hotdata.baiduhot_id }}&nbsp
+            </p>
+            <span>{{ hotdata.baiduhot_name }}</span>
+          </a>
+        </div>
+      </el-card>
+      <!-- 微博热搜榜 -->
+      <el-card class="weibo-box-card">
+        <div slot="header" class="clearfix">
+          <a class="iconfont icon-weibo"></a>
+          <span>微博热搜</span>
+        </div>
+        <div
+          v-for="(hotdata, index) in weiboHotData"
+          :key="hotdata.id"
+          class="text"
+        >
+          <a :href="hotdata.weibohot_src" target="_blank">
+            <p :style="{ color: hotdata.weibohot_isred ? 'red' : 'black' }">
+              {{ hotdata.weibohot_id }}&nbsp
+            </p>
+            <span>{{ hotdata.weibohot_name }}</span>
+          </a>
+        </div>
+      </el-card>
+      <!-- 知乎热搜榜 -->
+      <el-card class="zhihu-box-card">
+        <div slot="header" class="clearfix">
+          <a class="iconfont icon-shejiaotubiao-10"></a>
+          <span>知乎热搜</span>
+        </div>
+        <div
+          v-for="(hotdata, index) in zhihuHotData"
+          :key="hotdata.zhuhuhot_id"
+          class="text"
+        >
+          <a :href="hotdata.zhihuhot_src" target="_blank">
+            <p :style="{ color: hotdata.zhihuhot_isred ? 'red' : 'black' }">
+              {{ hotdata.zhihuhot_id }}&nbsp
+            </p>
+            <span>{{ hotdata.zhihuhot_name }}</span>
+          </a>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
@@ -71,43 +132,48 @@ export default {
       goodsEc: false,
       orderEc: false,
       countEc: false,
-      showExpData: [90, 50, 20, 50, 70, 30, 99],
-      showActData: [30, 80, 11, 30, 37, 66, 50],
+      showExpData: [900, 500, 200, 500, 700, 300, 990],
+      showActData: [300, 800, 110, 300, 370, 606, 500],
+      baiduHotData: [],
+      weiboHotData: [],
+      zhihuHotData: []
     };
   },
   components: {
     countTo,
   },
-  
   mounted() {
     this.getEchartCategory();
+    this.getBaiduHot();
+    this.getWeiboHot();
+    this.getZhihuHot();
   },
   watch: {
     userEc(show) {
       if (show) {
-        this.showExpData = [90, 50, 20, 50, 70, 30, 99];
-        this.showActData = [30, 80, 11, 30, 37, 66, 50];
+        this.showExpData = [900, 500, 200, 500, 700, 300, 909];
+        this.showActData = [300, 800, 101, 300, 370, 660, 500];
         this.getEchartCategory();
       }
     },
     goodsEc(show) {
       if (show) {
-        this.showExpData = [110, 66, 70, 66, 44, 78, 99];
-        this.showActData = [30, 80, 99, 88, 37, 66, 50];
+        this.showExpData = [1010, 606, 700, 660, 440, 780, 990];
+        this.showActData = [300, 800, 990, 808, 370, 660, 500];
         this.getEchartCategory();
       }
     },
     orderEc(show) {
       if (show) {
-        this.showExpData = [120, 50, 70, 98, 55, 80, 99];
-        this.showActData = [90, 160, 100, 77, 37, 66, 50];
+        this.showExpData = [1020, 500, 700, 980, 550, 800, 990];
+        this.showActData = [900, 1060, 1000, 707, 370, 660, 500];
         this.getEchartCategory();
       }
     },
     countEc(show) {
       if (show) {
-        this.showExpData = [120, 100, 120, 99, 55, 80, 99];
-        this.showActData = [88, 70, 99, 77, 100, 130, 110];
+        this.showExpData = [1200, 1000, 1020, 990, 550, 800, 909];
+        this.showActData = [880, 700, 990, 770, 1000, 1030, 1010];
         this.getEchartCategory();
       }
     },
@@ -122,48 +188,30 @@ export default {
       }
       const option = {
         animationDuration: 3000,
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          data: ["expected", "actual"],
-        },
-        grid: {
-          left: "3%",
-          right: "3%",
-          bottom: "3%",
-          containLabel: true,
-        },
+        tooltip: { trigger: "axis" },
+        legend: { data: ["expected", "actual"] },
+        grid: { left: "3%", right: "3%", bottom: "3%", containLabel: true },
         xAxis: {
           type: "category",
           boundaryGap: false,
           data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         },
-        yAxis: {
-          type: "value",
-        },
+        yAxis: { type: "value" },
         series: [
           {
             name: "expected",
             type: "line",
             data: this.showExpData,
             smooth: true,
-            lineStyle: {
-              color: "red",
-            },
-            itemStyle: {
-              color: "red",
-            },
+            lineStyle: { color: "red" },
+            itemStyle: { color: "red" },
           },
           {
             name: "actual",
             type: "line",
             data: this.showActData,
             smooth: true,
-            areaStyle: {
-              color: "#dbe6fa",
-              opacity: 0.5,
-            },
+            areaStyle: { color: "#dbe6fa", opacity: 0.5 },
           },
         ],
       };
@@ -190,6 +238,19 @@ export default {
           });
         }
       });
+    },
+    // 雷达图
+    getEchartRadar() {
+      const chartRadar = this.$refs.chartRadar;
+      let myChart = this.$echarts.getInstanceByDom(chartRadar);
+      if (!myChart) {
+        myChart = this.$echarts.init(chartRadar);
+      }
+      const option = {
+        title: {
+          text: "chartRadar",
+        },
+      };
     },
     // 展示用户图表的回调
     showUserEc() {
@@ -219,12 +280,27 @@ export default {
       this.goodsEc = false;
       this.orderEc = false;
     },
+    // 获取百度热搜数据
+    async getBaiduHot() {
+      await this.$store.dispatch("getBaiduHotData");
+      this.baiduHotData = this.$store.state.home.baiduHotData;
+    },
+    // 获取微博热搜数据
+    async getWeiboHot() {
+      await this.$store.dispatch("getWeiboHotData");
+      this.weiboHotData = this.$store.state.home.weiboHotData;
+    },
+    // 获取知乎热搜数据
+    async getZhihuHot() {
+      await this.$store.dispatch("getZhihuHotData");
+      this.zhihuHotData = this.$store.state.home.zhihuHotData;
+    },
   },
 };
 </script>
 <style scoped>
 .homeContainer {
-  height: 900px;
+  height: 868px;
   background: #f0f2f5;
 }
 .data {
@@ -304,5 +380,85 @@ export default {
   width: 95%;
   height: 35%;
   margin: 0 auto;
+}
+.baidu-box-card {
+  float: left;
+  margin-top: 10px;
+  margin-left: 150px;
+  width: 25%;
+}
+.baidu-box-card .clearfix a {
+  color: blue;
+}
+.baidu-box-card span {
+  margin-left: 10px;
+}
+.baidu-box-card .text {
+  height: 50%;
+  font-size: 16px;
+  line-height: 30px;
+}
+.baidu-box-card .text a {
+  color: black;
+}
+.baidu-box-card .text p {
+  float: left;
+}
+.baidu-box-card .text .red {
+  color: red;
+}
+.weibo-box-card {
+  float: left;
+  margin-top: 10px;
+  margin-left: 70px;
+  width: 25%;
+}
+.weibo-box-card .clearfix a {
+  font-size: 20px;
+  color: red;
+}
+.weibo-box-card span {
+  margin-left: 10px;
+}
+.weibo-box-card .text {
+  height: 50%;
+  font-size: 16px;
+  line-height: 30px;
+}
+.weibo-box-card .text a {
+  color: black;
+}
+.weibo-box-card .text p {
+  float: left;
+}
+.weibo-box-card .text .red {
+  color: red;
+}
+.zhihu-box-card {
+  float: left;
+  margin-top: 10px;
+  margin-left: 70px;
+  width: 25%;
+}
+.zhihu-box-card .clearfix a {
+  font-size: 22px;
+  color: blue;
+}
+.zhihu-box-card span {
+  margin-left: 10px;
+}
+.zhihu-box-card .text {
+  height: 50%;
+  font-size: 16px;
+  line-height: 37px;
+}
+.zhihu-box-card .text a {
+  color: black;
+}
+.zhihu-box-card .text p {
+  float: left;
+}
+.zhihu-box-card .text .red {
+  color: red;
 }
 </style>
