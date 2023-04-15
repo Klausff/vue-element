@@ -1,6 +1,11 @@
 # vue-admin
-
-npm i //下载相关依赖
+###下载相关依赖
+npm i 
+```
+###运行服务器
 cd src/server
-node index.js //运行服务器
-npm run serve //运行项目
+```
+node index.js 
+```
+##运行项目
+npm run serve
