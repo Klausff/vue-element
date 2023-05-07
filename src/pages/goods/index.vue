@@ -7,7 +7,7 @@
             type="primary"
             icon="el-icon-circle-plus-outline"
             @click="dialogAddFormVisible = true"
-            >添加</el-button
+            >{{$t('message.add')}}</el-button
           >
           <el-dialog title="添加商品" :visible.sync="dialogAddFormVisible">
             <el-form :model="addForm">
@@ -45,12 +45,16 @@
             </div>
           </el-dialog>
           <el-button type="primary" icon="el-icon-edit" @click="changeData"
-            >编辑</el-button
+            >{{$t('message.edit')}}</el-button
           >
           <el-dialog title="编辑商品" :visible.sync="dialogChangeFormVisible">
             <el-form>
               <el-form-item label="商品编码" :label-width="formLabelWidth">
-                <el-input v-model="changeForm.goodsCode" class="elFormInput" clearable>
+                <el-input
+                  v-model="changeForm.goodsCode"
+                  class="elFormInput"
+                  clearable
+                >
                 </el-input>
               </el-form-item>
               <el-form-item label="商品名称" :label-width="formLabelWidth">
@@ -77,6 +81,22 @@
                 >
                 </el-input>
               </el-form-item>
+              <el-form-item label="颜色" :label-width="formLabelWidth">
+                <el-input
+                  v-model="changeForm.color"
+                  class="elFormInput"
+                  clearable
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item label="内存大小" :label-width="formLabelWidth">
+                <el-input
+                  v-model="changeForm.size"
+                  class="elFormInput"
+                  clearable
+                >
+                </el-input>
+              </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogChangeFormVisible = false"
@@ -91,35 +111,78 @@
             type="primary"
             icon="el-icon-delete"
             @click="deleteGoodsData"
-            >删除</el-button
+            >{{$t('message.delete')}}</el-button
           >
         </el-row>
       </div>
       <div class="right">
         <el-input
           class="elSearchInput"
-          placeholder="请输入商品编码或商品名称"
+          :placeholder="keyWord"
           v-model="searchWord"
+          @clear="clear"
           clearable
         >
         </el-input>
         <el-button type="primary" icon="el-icon-search" @click="searchGoodsData"
-          >搜索</el-button
+          >{{$t('message.search')}}</el-button
         >
       </div>
     </div>
     <div class="goodsTable">
-      <el-table v-loading="loading" ref="multipleTable" :data="tableData" tooltip-effect="dark" border @selection-change="handleSelectionChange">
+      <el-table
+        v-loading="loading"
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        border
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="100"> </el-table-column>
-        <el-table-column prop="goods_code" label="商品编码" width="300" sortable resizable></el-table-column>
-        <el-table-column prop="goods_name" label="商品名称" width="300" resizable></el-table-column>
-        <el-table-column prop="goods_price" label="商品价格" width="300" sortable resizable></el-table-column>
-        <el-table-column prop="goods_count" label="库存" sortable=""></el-table-column>
-        <el-table-column prop="goods_color" label="颜色" sortable=""></el-table-column>
-        <el-table-column prop="goods_RAM" label="内存大小" sortable=""></el-table-column>
+        <el-table-column
+          prop="goods_code"
+          :label='goodsCode'
+          width="300"
+          sortable
+          resizable
+        ></el-table-column>
+        <el-table-column
+          prop="goods_name"
+          :label='goodsName'
+          width="300"
+          resizable
+        ></el-table-column>
+        <el-table-column
+          prop="goods_price"
+          :label='goodsPrice'
+          width="300"
+          sortable
+          resizable
+        ></el-table-column>
+        <el-table-column
+          prop="goods_count"
+          :label="goodsInventory"
+          sortable=""
+        ></el-table-column>
+        <el-table-column
+          prop="goods_color"
+          :label="goodsColor"
+          sortable=""
+        ></el-table-column>
+        <el-table-column
+          prop="goods_RAM"
+          :label="goodsRAM"
+          sortable=""
+        ></el-table-column>
       </el-table>
     </div>
-    <el-pagination style="float:right;" background layout="prev, pager, next" :total="1000" @current-change="currentChange"></el-pagination>
+    <el-pagination
+      style="float: right"
+      background
+      layout="prev, pager, next"
+      :total="1000"
+      @current-change="currentChange"
+    ></el-pagination>
   </div>
 </template>
 
@@ -138,24 +201,31 @@ export default {
         name: "",
         price: "",
         count: "",
-        code:'',
-        color:'',
-        size:''
+        code: "",
+        color: "",
+        size: "",
       },
       changeForm: {
         id: "",
         name: "",
         price: "",
         count: "",
-        goodsCode:"",
-        color:"",
-        size:""
+        goodsCode: "",
+        color: "",
+        size: "",
       },
       formLabelWidth: "120px",
       searchWord: "",
-      page:1,
-      data:[],
-      loading:true
+      page: 1,
+      data: [],
+      loading: true,
+      goodsCode:this.$t('message.goodsCode'),
+      goodsName:this.$t('message.goodsCode'),
+      goodsPrice:this.$t('message.goodsCode'),
+      goodsInventory:this.$t('message.goodsInventory'),
+      goodsColor:this.$t('message.goodsColor'),
+      goodsRAM:this.$t('message.goodsRAM'),
+      keyWord:this.$t('message.keyWord')
     };
   },
   methods: {
@@ -218,7 +288,7 @@ export default {
       this.dialogAddFormVisible = false;
       let { addForm } = this;
       if (
-        addForm.code== "" ||
+        addForm.code == "" ||
         addForm.name == "" ||
         addForm.price == "" ||
         addForm.count == "" ||
@@ -238,7 +308,7 @@ export default {
               price: addForm.price,
               count: addForm.count,
               color: addForm.color,
-              size: addForm.size
+              size: addForm.size,
             },
           })
           .then((res) => {})
@@ -250,8 +320,8 @@ export default {
         addForm.name = "";
         addForm.price = "";
         addForm.count = "";
-        addForm.color = ""
-        addForm.size = ""
+        addForm.color = "";
+        addForm.size = "";
         this.getGoodsData();
         this.$message({
           type: "success",
@@ -271,17 +341,23 @@ export default {
             goods_name: changeForm.name,
             goods_price: changeForm.price,
             goods_count: changeForm.count,
+            goods_color: changeForm.color,
+            goods_RAM: changeForm.size,
           },
         })
-        .then((res) => {})
+        .then((res) => {
+        })
         .catch((err) => {
-          console.log("修改数据失败" + err);
+          this.$message({
+            type: "warning",
+            message: "修改失败",
+          });
         });
-      this.getGoodsData();
-      this.$message({
-        type: "success",
-        message: `修改成功`,
-      });
+        this.getGoodsData();
+        this.$message({
+            type: "success",
+            message: `修改成功`,
+        });
     },
     // 点击编辑按钮的回调
     changeData() {
@@ -294,54 +370,50 @@ export default {
       } else {
         this.dialogChangeFormVisible = true;
         let { changeForm, multipleSelection } = this;
-        console.log(multipleSelection)
         changeForm.id = multipleSelection[0].goods_id;
         changeForm.name = multipleSelection[0].goods_name;
         changeForm.price = multipleSelection[0].goods_price;
         changeForm.count = multipleSelection[0].goods_count;
         changeForm.goodsCode = multipleSelection[0].goods_code;
+        changeForm.color = multipleSelection[0].goods_color;
+        changeForm.size = multipleSelection[0].goods_RAM;
       }
     },
     // 点击搜索按钮的回调
     searchGoodsData() {
-      let { tableData, searchWord } = this;
-      if (searchWord == "") {
-        this.$message({
-          type: "warning",
-          message: "不能输入为空",
-        });
-      } else {
-        // 实现将要搜索的数据置顶的功能
-        // 把要搜索的数据从数组中删除然后插到数组开头实现置顶
-        let data = [];
-        for (let i = 0; i < tableData.length; i++) {
-          if (tableData[i].goodsCode == searchWord||tableData[i].name==searchWord) {
-            data = tableData[i];
-            tableData.splice(i, 1);
-          }
-        }
-        tableData.unshift(data);
-      }
+      let { searchWord } = this;
+      axios
+        .get("http://localhost:3000/searchGoodsData", {
+          params: { searchWord },
+        })
+        .then((res) => {
+          this.tableData = res.data;
+        })
+        .catch((err) => {});
     },
     // 数组拆分
-    splitArray(array,size){
-      let index=0
-      let data =[]
-      while(index<array.length){
-        data.push(array.slice(index,index+=size))
+    splitArray(array, size) {
+      let index = 0;
+      let data = [];
+      while (index < array.length) {
+        data.push(array.slice(index, (index += size)));
       }
-      return data
+      return data;
+    },
+    // 清空input框后还原原表数据
+    clear() {
+      this.getGoodsData();
     },
     // 发请求获取数据库中的数据
     async getGoodsData() {
       await this.$store.dispatch("getGoodsData");
-      this.data = this.splitArray(this.$store.state.goods.goodsData,10)
-      this.tableData = this.data[0]
-      this.loading=false
+      this.data = this.splitArray(this.$store.state.goods.goodsData, 10);
+      this.tableData = this.data[0];
+      this.loading = false;
     },
-    currentChange(val){
-      this.tableData= this.data[val-1]
-    }
+    currentChange(val) {
+      this.tableData = this.data[val - 1];
+    },
   },
   mounted() {
     // 获取商品数据
@@ -369,10 +441,10 @@ export default {
   height: 40px;
   color: black;
 }
-.right{
+.right {
   margin: 10px 0;
 }
-.left{
+.left {
   margin: 10px 0;
 }
 .right .el-button {

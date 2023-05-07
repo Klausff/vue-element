@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item>
         <a class="iconfont icon-mima iconfont"></a>
-        <el-input @focus="this.isShowPwd=true" ref="password" v-model="password" placeholder="Password" :type="pwd"></el-input>
+        <el-input  ref="password" v-model="password" placeholder="Password" :type="pwd"></el-input>
         <span class="showPwd" @click="changeShow">
           <i v-show="password" :class="this.isShowPwd === true ? 'iconfont icon-xianshimima' : 'iconfont icon-buxianshimima'"></i>
         </span>
@@ -34,7 +34,7 @@ export default {
     return {
       username: '',
       password: '',
-      isShowPwd:false,
+      isShowPwd: false,
       pwd:'password',
       userData:[],
       newArr:[]

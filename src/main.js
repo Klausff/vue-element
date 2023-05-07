@@ -7,6 +7,7 @@ import PubSub from 'pubsub-js'
 import * as http from '@/api'
 import store from './store'
 import * as echarts from 'echarts'
+import i18n from './i18n/i18n';
 Vue.prototype.$echarts=echarts
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -15,5 +16,6 @@ new Vue({
   el:'#app',
   router,
   store,
+  i18n,
   render: h => h(App),
 })

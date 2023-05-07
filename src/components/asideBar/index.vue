@@ -7,21 +7,21 @@
       background-color="#545c64"
       text-color="#fff"
     >
-      <el-menu-item index="1" @click="toHome">
+      <el-menu-item style="padding-left:6px" index="1" @click="toHome">
         <i class="el-icon-s-home"></i>
-        <span slot="title">个人中心</span>
+        <span slot="title">{{$t('message.personalCenter')}}</span>
       </el-menu-item>
-      <el-menu-item index="2" @click="toGoods">
+      <el-menu-item style="padding-left:6px" index="2" @click="toGoods">
         <i class="el-icon-s-goods"></i>
-        <span slot="title">商品管理</span>
+        <span slot="title">{{$t('message.goodsManagement')}}</span>
       </el-menu-item>
-      <el-menu-item index="3" @click="toOrder" >
+      <el-menu-item style="padding-left:6px" index="3" @click="toOrder" >
         <i class="el-icon-s-order" ></i>
-        <span slot="title">订单管理</span>
+        <span slot="title">{{$t('message.ordersManagement')}}</span>
       </el-menu-item>
-      <el-menu-item index="4" @click="toCount">
+      <el-menu-item style="padding-left:6px" index="4" @click="toCount">
         <i class="el-icon-s-data"></i>
-        <span slot="title">数据统计</span>
+        <span slot="title">{{$t('message.dataStatistics')}}</span>
       </el-menu-item>
     </el-menu>
   </div>

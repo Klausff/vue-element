@@ -6,6 +6,7 @@ import Goods from '@/pages/goods';
 import Main from '@/pages/main';
 import Order from '@/pages/order'
 import DataCount from '@/pages/dataCount'
+import i18n from "../i18n/i18n";
 
 //解决vue路由重复导航错误
 //获取原型对象上的push函数
@@ -15,6 +16,8 @@ VueRouter.prototype.push = function push(location) {
    return originalPush.call(this, location).catch(err => err)
 }
 Vue.use(VueRouter)
+
+
 export default new VueRouter({
     routes:[
         { 
@@ -29,31 +32,23 @@ export default new VueRouter({
                 {
                     path:'/home',
                     component:Home,
-                    meta:{
-                        title:'个人中心'
-                    },
+                    name:'message.personalCenter',
                 },
                 {
                     path:'/goods',
-                    name:'goods',
+                    name:'message.goodsManagement',
                     component:Goods,
-                    meta:{
-                        title:'商品管理'
-                    }
                 },
                 {
                     path:'/order',
                     component:Order,
-                    meta:{
-                        title:'订单管理'
-                    }
+                    name:'message.ordersManagement',
                 },
                 {
                     path:'/dataCount',
                     component:DataCount,
-                    meta:{
-                        title:'数据统计'
-                    }
+                    name:'message.dataStatistics',
+                    
                 },
             ]  
         },

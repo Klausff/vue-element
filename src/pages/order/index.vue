@@ -1,67 +1,69 @@
 <template>
-  <el-table v-loading="lodaing" border :data="searchOrderData" style="width: 100%">
-    <el-table-column label="订单编号" prop="orderNum"> </el-table-column>
-    <el-table-column label="姓名" prop="name"> </el-table-column>
-    <el-table-column label="手机号" prop="tel"> </el-table-column>
-    <el-table-column label="购买产品" prop="goods"> </el-table-column>
-    <el-table-column label="数量" prop="count"> </el-table-column>
-    <el-table-column label="总金额" prop="total"> </el-table-column>
-    <el-table-column label="地址" prop="address"> </el-table-column>
-    <el-table-column label="下单日期" prop="date"> </el-table-column>
-    <el-table-column label="状态" prop="status"> </el-table-column>
+  <el-table v-loading="loading" border :data="orderData" style="width: 100%">
+    <el-table-column :label="orderNum" prop="orderNum"> </el-table-column>
+    <el-table-column :label="orderName" prop="name"> </el-table-column>
+    <el-table-column :label="orderTel" prop="tel"> </el-table-column>
+    <el-table-column :label="orderGoods" prop="goods"> </el-table-column>
+    <el-table-column :label="orderCount" prop="count"> </el-table-column>
+    <el-table-column :label="totalAmount" prop="total"> </el-table-column>
+    <el-table-column :label="orderAddress" prop="address"> </el-table-column>
+    <el-table-column :label="orderDate" prop="date"> </el-table-column>
+    <el-table-column :label="orderStatus" prop="status"> </el-table-column>
 
     <el-table-column align="right">
       <template slot="header" slot-scope="scope">
         <el-input
           class="elInput"
-          v-model="search"
+          v-model="searchWord"
+          @input="searchHandle"
+          @clear="clear"
           size="mini"
-          placeholder="输入关键字搜索"
+          :placeholder="keyWord"
         />
       </template>
       <template slot-scope="scope">
-        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">{{$t('message.edit')}}</el-button>
         <el-dialog open="updateData" :visible.sync="dialogFormVisible">
-          <div slot="title" style="text-align:left;font-size:20px">修改订单</div>
+          <div slot="title" style="text-align:left;font-size:20px">{{$t('message.modifyTheOrder')}}</div>
           <el-form>
-            <el-form-item label="订单编号" :label-width="formLabelWidth" >
+            <el-form-item :label="orderNum" :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.orderNum" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="姓名" :label-width="formLabelWidth" >
+            <el-form-item :label="orderName" :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.name" clearable></el-input>
             </el-form-item>
-            <el-form-item label="手机号" :label-width="formLabelWidth" >
+            <el-form-item :label="orderTel"  :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.tel" clearable></el-input>
             </el-form-item>
-            <el-form-item label="购买产品" :label-width="formLabelWidth" >
+            <el-form-item :label="orderGoods" :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.goods" clearable></el-input>
             </el-form-item>
-            <el-form-item label="数量" :label-width="formLabelWidth" >
+            <el-form-item :label="orderCount" :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.count" clearable></el-input>
             </el-form-item>
-            <el-form-item label="总金额" :label-width="formLabelWidth" >
+            <el-form-item :label="totalAmount" :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.total" clearable></el-input>
             </el-form-item>
-            <el-form-item label="地址" :label-width="formLabelWidth" >
+            <el-form-item :label="orderAddress" :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.address" clearable></el-input>
             </el-form-item>
-            <el-form-item label="日期" :label-width="formLabelWidth" >
+            <el-form-item :label="orderDate" :label-width="formLabelWidth" >
               <el-input s v-model="changeOrderData.date" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="状态" :label-width="formLabelWidth" >
+            <el-form-item :label="orderStatus" :label-width="formLabelWidth" >
               <el-input  v-model="changeOrderData.status" :disabled="true"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="cancelUpdate">取 消</el-button>
-            <el-button type="primary" @click="updateOrderData">确 定</el-button>
+            <el-button @click="cancelUpdate">{{$t('message.cancel')}}</el-button>
+            <el-button type="primary" @click="updateOrderData">{{$t('message.confirm')}}</el-button>
           </div>
         </el-dialog>
         <el-button
           size="mini"
           type="danger"
           @click="handleDelete(scope.$index, scope.row)"
-          >Delete</el-button
+          >{{$t('message.delete')}}</el-button
         >
       </template>
     </el-table-column>
@@ -85,10 +87,20 @@ export default {
         date:'',
         status:''
       },
-      search: "",
+      searchWord: "",
       dialogFormVisible: false,
       formLabelWidth: '120px',
-      loading:true
+      loading:true,
+      orderNum:this.$t('message.orderNum'),
+      orderName:this.$t('message.orderName'),
+      orderTel:this.$t('message.orderTel'),
+      orderGoods:this.$t('message.orderGoods'),
+      orderCount:this.$t('message.orderCount'),
+      totalAmount:this.$t('message.totalAmount'),
+      orderAddress:this.$t('message.orderAddress'),
+      orderDate:this.$t('message.orderDate'),
+      orderStatus:this.$t('message.orderStatus'),
+      keyWord:this.$t('message.keyWord')
     };
   },
   methods: {
@@ -128,10 +140,18 @@ export default {
     updateOrderData(){
       this.dialogFormVisible = false
       let {changeOrderData} = this
-      axios.get('http://localhost:3000/updateOrderData',{params:{name:changeOrderData.name,tel:changeOrderData.tel,
-      goods:changeOrderData.goods,count:changeOrderData.count,
-      total:changeOrderData.total,address:changeOrderData.address,orderNum:changeOrderData.orderNum}}).then((res)=>{
-      }).catch((err)=>{
+      axios.get('http://localhost:3000/updateOrderData',{
+        params:{
+          name:changeOrderData.name,
+          tel:changeOrderData.tel,
+          goods:changeOrderData.goods,
+          count:changeOrderData.count,
+          total:changeOrderData.total,
+          address:changeOrderData.address,
+          orderNum:changeOrderData.orderNum
+          }
+        }).then((res)=>{
+        }).catch((err)=>{
         console.log('修改数据失败'+err)
       })
       this.getOrderData()
@@ -139,6 +159,21 @@ export default {
         type:'success',
         message:'修改成功'
       })
+    },
+    // 搜索订单数据
+    searchHandle(){
+      let {searchWord} = this
+      axios.get("http://localhost:3000/searchOrderData",{
+        params:{searchWord}
+      })
+      .then((res)=>{
+        this.orderData=res.data
+      })
+      .catch((err)=>{})
+    },
+    // 清空input框后还原原表数据
+    clear() {
+      this.getGoodsData();
     },
     // 取消修改
     cancelUpdate(){
@@ -154,19 +189,7 @@ export default {
       this.loading=false
     },
   },
-  computed: {
-    // 计算实现前端关键字检索
-    searchOrderData() {
-      let { orderData, search } = this;
-      if(search.length>=0&&search.length<1){
-        return orderData.filter((data) =>!search || data.name.toLowerCase().includes(search.toLowerCase()))
-      }else if(search.length>1&&search.length<=11){
-        return orderData.filter((data) =>!search || data.tel.includes(search))
-      }else if(search.length>11&&search.length<=18){
-        return orderData.filter((data) =>!search || data.orderNum.includes(search))
-      }
-    },
-  },
+  
   mounted() {
     this.getOrderData();
   },

@@ -6,24 +6,24 @@
     </span>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="(item, index) in breadList" :key="index">
-        <router-link :to="item[0]"><a>{{ item[1] }}</a></router-link>
+        <router-link :to="item[0]"><a>{{ $t(item[1]) }}</a></router-link>
       </el-breadcrumb-item>
     </el-breadcrumb>
     <div class="todoList">
       <el-popover placement="bottom" width="400" trigger="hover" >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>代办事项</span>
-            <el-button @click="todoListISRead=true" style="float: right; padding: 3px 0" type="text">全部已读</el-button>
+            <span>{{$t("message.todo")}}</span>
+            <el-button @click="todoListISRead=true" style="float: right; padding: 3px 0" type="text">{{$t("message.allRead")}}</el-button>
           </div>
           <div v-for="o in 8" :key="o" class="text item">
             <a :class="todoListISRead?'iconfont icon-yixuan green':'iconfont icon-danxuanweixuanzhong'"></a>
-            <span :class="todoListISRead?'isRead':''">{{'代办' + o }}</span>
+            <span :class="todoListISRead?'isRead':''">{{$t("message.todo")}} {{ o }}</span>
           </div>
         </el-card>
         <el-button slot="reference">
           <a class="iconfont icon-daiban"></a>
-          <span>代办</span>
+          <span>{{$t("message.todo")}}</span>
         </el-button>
       </el-popover>
     </div>
@@ -31,17 +31,17 @@
       <el-popover placement="bottom" width="400" trigger="hover" >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>消息通知</span>
-            <el-button @click="messageIsRead=true" style="float: right; padding: 3px 0" type="text">全部已读</el-button>
+            <span>{{$t("message.notice")}}</span>
+            <el-button @click="messageIsRead=true" style="float: right; padding: 3px 0" type="text">{{$t("message.allRead")}}</el-button>
           </div>
           <div v-for="o in 8" :key="o" class="text item">
             <a :class="messageIsRead?'iconfont icon-yixuan green':'iconfont icon-yuandian red'"></a>
-            <span :class="messageIsRead?'isRead':''">{{'消息 ' + o }}</span>
+            <span :class="messageIsRead?'isRead':''">{{$t("message.message")}} {{ o }}</span>
           </div>
         </el-card>
         <el-button slot="reference">
           <a class="iconfont icon-xiaoxitongzhi"></a>
-          <span>通知</span>
+          <span>{{$t("message.notice")}}</span>
         </el-button>
       </el-popover>
     </div>
@@ -50,7 +50,7 @@
         <el-calendar  v-model="date"></el-calendar>
         <el-button slot="reference">
           <a class="iconfont icon-rili"></a>
-          <span>日历</span>
+          <span>{{$t("message.calendar")}}</span>
         </el-button>
       </el-popover>
     </div>
@@ -62,7 +62,8 @@
         <i class="el-icon-s-tools"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="logOut">退出</el-dropdown-item>
+        <el-dropdown-item command="changeLang">{{$t("message.changeLang")}}</el-dropdown-item>
+        <el-dropdown-item command="logOut">{{$t("message.logOut")}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -78,7 +79,8 @@ export default {
       newBreadList: [],
       date:new Date(),
       messageIsRead:false,
-      todoListISRead:false
+      todoListISRead:false,
+      isChinese:true
     };
   },
   created() {
@@ -119,6 +121,7 @@ export default {
     },
   },
   methods: {
+    // 侧边栏伸展
     changeCollapse() {
       this.isCollapse = !this.isCollapse;
       const PubSub = require("pubsub-js");
@@ -128,11 +131,23 @@ export default {
       if (command == "logOut") {
         this.$router.push("/login");
       }
+      if(command == "changeLang"){
+        if(this.isChinese) {
+        this.$i18n.locale ='en' 
+        localStorage.setItem('lang','en')
+        this.isChinese=false
+      }else {
+        this.$i18n.locale ='cn' 
+        localStorage.setItem('lang','cn')
+        this.isChinese=true
+      }
+      }
     },
+    // 顶部面包屑
     getRouteChange() {
       const { breadList } = this;
       let toPath = this.$route.path;
-      let toTitle = this.$route.meta.title;
+      let toTitle = this.$route.name; 
       breadList.push([toPath, toTitle]);
       for(let i=0;i<breadList.length-1;i++){
         for(let j=i+1;j<breadList.length;j++){

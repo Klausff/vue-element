@@ -4,7 +4,7 @@
     <div class="data">
       <div class="item" @click="showUserEc">
         <a class="userIcon iconfont icon-yonghu2"></a>
-        <span class="text">新增访客</span>
+        <span class="text">{{$t("message.newVisitor")}}</span>
         <span class="num"
           ><countTo
             :startVal="0"
@@ -15,7 +15,7 @@
       </div>
       <div class="item" @click="showGoodsEc">
         <a class="goodsIcon iconfont icon-maijiagouwuche"></a>
-        <span class="text">商品总数</span>
+        <span class="text">{{$t("message.totalGoods")}}</span>
         <span class="num"
           ><countTo
             :startVal="0"
@@ -26,7 +26,7 @@
       </div>
       <div class="item" @click="showOrderEc">
         <a class="orderIcon iconfont icon-dingdan"></a>
-        <span class="text">订单总数</span>
+        <span class="text">{{$t("message.totalOrders")}}</span>
         <span class="num"
           ><countTo
             :startVal="0"
@@ -37,7 +37,7 @@
       </div>
       <div class="item" @click="showCountEc">
         <a class="countIcon iconfont icon-xiaoshoue"></a>
-        <span class="text">销售总额</span>
+        <span class="text">{{$t("message.totalSales")}}</span>
         <span class="num"
           ><countTo
             :startVal="0"
@@ -65,7 +65,7 @@
       <el-card class="baidu-box-card">
         <div slot="header" class="clearfix">
           <a class="iconfont icon-baidu"></a>
-          <span>百度热搜</span>
+          <span>{{$t("message.baiduHot")}}</span>
         </div>
         <div
           v-for="(hotdata, index) in baiduHotData"
@@ -84,7 +84,7 @@
       <el-card class="weibo-box-card">
         <div slot="header" class="clearfix">
           <a class="iconfont icon-weibo"></a>
-          <span>微博热搜</span>
+          <span>{{$t("message.weiboHot")}}</span>
         </div>
         <div
           v-for="(hotdata, index) in weiboHotData"
@@ -103,7 +103,7 @@
       <el-card class="zhihu-box-card">
         <div slot="header" class="clearfix">
           <a class="iconfont icon-shejiaotubiao-10"></a>
-          <span>知乎热搜</span>
+          <span>{{$t("message.zhihuHot")}}</span>
         </div>
         <div
           v-for="(hotdata, index) in zhihuHotData"
@@ -189,7 +189,7 @@ export default {
       const option = {
         animationDuration: 3000,
         tooltip: { trigger: "axis" },
-        legend: { data: ["expected", "actual"] },
+        legend: { data: ['expected', 'actual'] },
         grid: { left: "3%", right: "3%", bottom: "3%", containLabel: true },
         xAxis: {
           type: "category",
@@ -199,7 +199,7 @@ export default {
         yAxis: { type: "value" },
         series: [
           {
-            name: "expected",
+            name: 'expected',
             type: "line",
             data: this.showExpData,
             smooth: true,
@@ -207,7 +207,7 @@ export default {
             itemStyle: { color: "red" },
           },
           {
-            name: "actual",
+            name:'actual',
             type: "line",
             data: this.showActData,
             smooth: true,
@@ -238,19 +238,6 @@ export default {
           });
         }
       });
-    },
-    // 雷达图
-    getEchartRadar() {
-      const chartRadar = this.$refs.chartRadar;
-      let myChart = this.$echarts.getInstanceByDom(chartRadar);
-      if (!myChart) {
-        myChart = this.$echarts.init(chartRadar);
-      }
-      const option = {
-        title: {
-          text: "chartRadar",
-        },
-      };
     },
     // 展示用户图表的回调
     showUserEc() {
@@ -363,7 +350,7 @@ export default {
 .data .item .text {
   position: relative;
   top: 20px;
-  left: 240px;
+  left: 200px;
   text-align: center;
   font-size: 25px;
   font-weight: bold;
@@ -372,7 +359,7 @@ export default {
 .data .item .num {
   position: relative;
   top: 65px;
-  left: 160px;
+  left: 110px;
   font-size: 20px;
   color: #666666;
 }

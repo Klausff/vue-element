@@ -38,7 +38,7 @@ export default {
       const option = {
         color: ["#80FFA5", "#00DDFF", "#37A2FF", "#0C02D0", "#7469D8"],
         title: {
-          text: "各品牌一周内销量展示（台）",
+          text: this.$t('message.CategoryTitle'),
         },
         tooltip: {
           trigger: "axis",
