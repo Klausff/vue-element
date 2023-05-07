@@ -1,24 +1,17 @@
 # vue-admin
 
-## Project setup
+## 下载相关依赖
 ```
-npm install
+npm i 
 ```
 
-### Compiles and hot-reloads for development
+### 运行服务器
+```
+cd src/server
+
+node index.js 
+```
+
+### 运行项目
 ```
 npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
